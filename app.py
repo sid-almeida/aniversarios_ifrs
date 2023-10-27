@@ -22,7 +22,7 @@ sender_password = "apuculacata"
 context = ssl.create_default_context()
 
 with st.sidebar:
-    st.image("logo_ifrs.png", width=250)
+    st.image("https://github.com/sid-almeida/aniversarios_ifrs/blob/main/logo_ifrs.png?raw=true", width=250)
     st.write('---')
     choice = st.radio("**Navegação:**", ("Atualizar dados", "Enviar e-mail"))
     st.info("Esta aplicação permite o envio de e-mails em massa     para os aniversariantes do dia.")
