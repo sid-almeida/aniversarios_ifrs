@@ -65,6 +65,10 @@ if choice == "Enviar e-mail":
     st.dataframe(data[data['ANIVERSARIO'] == data_atual.strftime("%d/%m/%Y")])
     st.write('---')
 
+    # Salvei o dataframe filtrado com os aniversariantes de hoje em um nono dataframe
+    data_hoje = data[data['ANIVERSARIO'] == data_atual.strftime("%d/%m/%Y")]
+
+
     # Se o botão for pressionado
     if st.button("Enviar e-mails"):
         for index, row in data.iterrows():
@@ -104,6 +108,19 @@ if choice == "Enviar e-mail":
                     server.starttls(context=context)
                     server.login(sender_email, sender_password)
                     server.sendmail(sender_email, email_destinatario, msg.as_string())
+
+                # Excluí os dados da coluna data que já foram enviados por e-mail
+                data = data[data['ANIVERSARIO'] != data_atual.strftime("%d/%m/%Y")]
+
+                # Modifiquei o dataframe data_hoje adicionando um ano à coluna ANIVERSARIO
+                data_hoje['ANIVERSARIO'] = data_hoje['ANIVERSARIO'].apply(lambda x: x[0:6] + str(int(x[6:])+1))
+
+                # Concatenei o dataframe data_hoje com o dataframe data
+                data = pd.concat([data, data_hoje], ignore_index=True)
+
+                # Salvei o dataframe data em um arquivo csv
+                data.to_csv("dados/tabela_aniversariantes.csv", index=False)
+
 
         st.success("E-mails de aniversário enviados com sucesso!")
     else:
